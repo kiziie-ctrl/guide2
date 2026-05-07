@@ -42,7 +42,7 @@ if "gemini_client" not in st.session_state:
 
     # 設定 GenerateContentConfig (包含上網工具)
     config = types.GenerateContentConfig(
-        #system_instruction=system_instruction,
+        system_instruction=system_instruction,
         tools=[types.Tool(google_search=types.GoogleSearch())], # 開啟 Google 搜尋功能
         temperature=0.7,
     )
@@ -50,7 +50,7 @@ if "gemini_client" not in st.session_state:
 
     # 🚀 霸氣直上：拔掉沒用的 try-except，直接指定正確的模型名稱！
     st.session_state.chat_session = client.chats.create(
-        model="gemini-3.1-flash-lite-preview",
+        model="gemini-2.5-flash",
         config=config
     )
     #model="gemini-3-flash-preview"
