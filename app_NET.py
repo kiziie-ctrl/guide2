@@ -52,13 +52,13 @@ if "gemini_client" not in st.session_state:
     # 使用你在 Playground 看到的最新預覽版模型
     try:
         st.session_state.chat_session = client.chats.create(
-            model="gemini-2.5-flash", 
+            model="gemini-3-flash", 
             config=config
         )
     except Exception as e:
         st.warning(f"無法啟動 Gemini 3，嘗試退回 Gemini 2.0。錯誤：{e}")
         st.session_state.chat_session = client.chats.create(
-            model="gemini-2.0-flash", 
+            model="gemini-2.5-flash", 
             config=config
         )
     
