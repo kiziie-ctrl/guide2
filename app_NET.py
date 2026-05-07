@@ -50,7 +50,7 @@ if "gemini_client" not in st.session_state:
 
     # 🚀 霸氣直上：拔掉沒用的 try-except，直接指定正確的模型名稱！
     st.session_state.chat_session = client.chats.create(
-        model="gemini-3-flash",
+        model="gemini-3.0-flash",
         config=config
     )
     #model="gemini-3-flash-preview"
