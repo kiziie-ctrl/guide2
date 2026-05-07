@@ -40,7 +40,7 @@ if "gemini_client" not in st.session_state:
         f"【手冊內容】：\n{context_text}"
     )
 
-    # 🚨 重要修正：GenerateContentConfig 內不可包含 model 參數，否則會報 Pydantic 錯誤
+    # 設定 GenerateContentConfig (包含上網工具)
     config = types.GenerateContentConfig(
         system_instruction=system_instruction,
         tools=[types.Tool(google_search=types.GoogleSearch())], # 開啟 Google 搜尋功能
@@ -48,19 +48,11 @@ if "gemini_client" not in st.session_state:
     )
     st.session_state.config = config
 
-    # 🚨 重要修正：將 model 名稱放在 chats.create 中
-    # 使用你在 Playground 看到的最新預覽版模型
-    try:
-        st.session_state.chat_session = client.chats.create(
-            model="gemini-3-flash", 
-            config=config
-        )
-    except Exception as e:
-        st.warning(f"無法啟動 Gemini 3，嘗試退回 Gemini 2.0。錯誤：{e}")
-        st.session_state.chat_session = client.chats.create(
-            model="gemini-2.5-flash", 
-            config=config
-        )
+    # 🚀 霸氣直上：拔掉沒用的 try-except，直接指定正確的模型名稱！
+    st.session_state.chat_session = client.chats.create(
+        model="gemini-3-flash-preview", 
+        config=config
+    )
     
     # 初始歡迎訊息
     st.session_state.messages = [
@@ -80,7 +72,7 @@ if prompt := st.chat_input("想問關於附中的什麼事？"):
 
     with st.spinner("小胖思考中並聯網查閱..."):
         try:
-            # 發送訊息給 Gemini 3
+            # 發送訊息給 Gemini 3 (真正的連網考驗在這裡)
             response = st.session_state.chat_session.send_message(prompt)
             
             # 取得模型回應文字
@@ -91,5 +83,6 @@ if prompt := st.chat_input("想問關於附中的什麼事？"):
             st.session_state.messages.append({"role": "assistant", "content": response_text})
             
         except Exception as e:
+            # 這裡才是真正會抓到 404 找不到模型、或是 Quota 爆掉的地方
             st.error(f"❌ 對話發生異常：{e}")
-            st.info("提示：這可能是因為 API 配額限制或模型名稱變更。")
+            st.info("提示：請確認 API 配額是否足夠，或是模型名稱是否正確。")
