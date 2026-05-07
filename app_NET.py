@@ -42,7 +42,7 @@ if "gemini_client" not in st.session_state:
 
     # 設定 GenerateContentConfig (包含上網工具)
     config = types.GenerateContentConfig(
-        system_instruction=system_instruction,
+        #system_instruction=system_instruction,
         tools=[types.Tool(google_search=types.GoogleSearch())], # 開啟 Google 搜尋功能
         temperature=0.7,
     )
